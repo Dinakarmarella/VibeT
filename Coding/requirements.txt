@@ -13,3 +13,4 @@ faiss-cpu
 langchain-experimental
 langchain-google-genai
 PyPDF2
+google-generativeai

@@ -1,0 +1,5 @@
+INFO: User 'admin' logged in successfully.
+WARNING: CPU temperature is rising to 85°C on server 'web-01'.
+ERROR: Service 'payment-gateway' failed to connect to database 'orders-db' on host 'db-prod-01'.
+INFO: Transaction '12345' completed successfully.
+ERROR: Disk space is critically low on 'db-prod-01'.

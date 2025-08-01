@@ -1,0 +1,15 @@
+langchain
+openai
+langchain-openai
+langchain-core
+langchain-community
+langchainhub
+python-dotenv
+ipython
+beautifulsoup4
+requests
+html2text
+faiss-cpu
+langchain-experimental
+langchain-google-genai
+PyPDF2

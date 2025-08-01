@@ -1,0 +1,11 @@
+--- Testing Triplet Extraction ---
+Input log: ERROR: Service 'payment-gateway' failed to connect to database 'orders-db' on host 'db-prod-01'.
+Running triplet extractor...
+
+--- Raw Model Output ---
+[{'generated_text': ' Orders-db  database  instance of'}]
+--------------------------
+
+--- Parsed Triplets ---
+
+--- Generating Cypher Query ---

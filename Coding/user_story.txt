@@ -1,0 +1,1 @@
+As a user, I want to log in to the system so that I can access my personal dashboard. The login should be secure and fast.

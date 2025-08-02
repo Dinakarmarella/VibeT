@@ -1,0 +1,37 @@
+Exercise 1:    Show me the time. 
+Write an Agent that show the time in a city the user provides.  Also have the Agent give a time-based joke. 
+Answer 1:    
+Instruction: Provide the local time for the provided city.  Also tell me a joke based on the time and the city. Tools to select: System Time 
+ 
+Exercise 2:  Display an image of any topic and include a teddy bear. 
+Answer 2:   
+Instruction: Generate an image of a subject of the question.   Include a Teddy Bear in each image. Tools to select: Image Generation 
+ 
+Exercise 3:  Display an image of any topic of the user but answer in the voice of a pirate and include a Teddy bear dressed as a pirate somewhere in the picture.   End with a famous pirate saying. 
+Answer 3:    
+Instruction: Answer the question in a pirate style voice.  Create an image of the topic of the question (but don't create the image in a pirate theme).  Include a Teddy bear dressed as a pirate somewhere in the picture. Add a famous pirate saying to your answer.  Tools to select: Image Generation 
+ 
+Exercise 4:  Answer questions that need the current weather forecast to know the answer Answer 4:   
+Instruction: Get the weather to answer the question and give a reason for your answer. Tools to select: Google Search 
+ 
+ 
+ 
+Exercise 5:  Answer any question as a pie or a bar chart. 
+Answer 5:    
+Instruction: Create the data in a pie chart. Tools to select: Google Search and Chart Creator 
+ 
+Exercise 6:  Show a process flow of a task Answer 6:    
+Instruction: Create a diagram out of the text given to me. Create the steps most efficiently, for example parallel steps when appropriate. Tools to select: Text to Diagram 
+ 
+Exercise 7:  Compare two cities and make a composite image and put the results in a PowerPoint. 
+Answer 7:   
+Compare the 2 cities as vacation destinations.  Create a composite image. Put the results in a PowerPoint document. Tools to select: Wikipedia, Image Generation, Doc Builder 
+ 
+Exercise 8:  Give an opinion on something about an image.   For example, an image of an architecture drawing.    
+Answer 8:   
+Instruction: Put this architecture picture into words and provide your opinion as a senior architect on its quality. Tools to Select: Image Recognition Sample to use as a prompt: (Use public URL images only) https://cdn-images-1.medium.com/v2/resize:fit:758/1*K6M-x-6e39jMq_c-2xqZIQ.png 
+ 
+Exercise 9:  Ground your answers in IBM Consulting’s strategy Answer 9:   
+Instruction: Answer all questions based on input from the Consulting collection. Tools to select: Doc Collection and IBM Strategy Collection 
+ 
+ 

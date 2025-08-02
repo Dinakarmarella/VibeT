@@ -6,9 +6,9 @@ from peft import LoraConfig, get_peft_model
 
 # --- Constants ---
 MODEL_NAME = "EleutherAI/pythia-14m"
-DATASET_PATH = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\training_data.csv"
-OUTPUT_DIR = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\results"
-LOG_FILE = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\slm_training.log"
+DATASET_PATH = "C:\\Users\\DINAKARMARELLA\\Documents\\Dins\\VibeT\\SLM\\training_data.csv"
+OUTPUT_DIR = "C:\\Users\\DINAKARMARELLA\\Documents\\Dins\\VibeT\\SLM\\results"
+LOG_FILE = "C:\\Users\\DINAKARMARELLA\\Documents\\Dins\\VibeT\\SLM\\slm_training.log"
 
 # --- Configure Logging ---
 logging.basicConfig(

@@ -63,7 +63,7 @@ Output:'''
 
 
 def main():
-    input_csv_path = "raw_requirements.csv"
+    input_csv_path = "cleaned_requirements.csv"
     output_csv_path = "classified_requirements.csv"
 
     script_dir = os.path.dirname(__file__)

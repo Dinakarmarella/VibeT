@@ -5,8 +5,8 @@ import logging
 
 # --- Constants ---
 BASE_MODEL_NAME = "EleutherAI/pythia-14m"
-ADAPTER_PATH = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\results"
-LOG_FILE = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\inference.log"
+ADAPTER_PATH = "C:\\Users\\DINAKARMARELLA\\Documents\\Dins\\VibeT\\SLM\\results"
+LOG_FILE = "C:\\Users\\DINAKARMARELLA\\Documents\\Dins\\VibeT\\SLM\\inference.log"
 
 # --- Configure Logging ---
 logging.basicConfig(
@@ -21,9 +21,9 @@ logging.basicConfig(
 def format_prompt(instruction, input_text=None):
     """Formats the instruction and optional input into a prompt string."""
     if input_text and input_text.strip():
-        return f"### Instruction:\n{instruction}\n\n### Input:\n{input_text}\n\n### Response:\n"
+        return f"""### Instruction:\n{instruction}\n\n### Input:\n{input_text}\n\n### Response:\n"""
     else:
-        return f"### Instruction:\n{instruction}\n\n### Response:\n"
+        return f"""### Instruction:\n{instruction}\n\n### Response:\n"""
 
 def main():
     """

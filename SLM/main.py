@@ -1,12 +1,24 @@
 import pandas as pd
 import torch
+import logging
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
 from peft import LoraConfig, get_peft_model
 
 # --- Constants ---
-MODEL_NAME = "microsoft/phi-3-mini-4k-instruct"
+MODEL_NAME = "EleutherAI/pythia-14m"
 DATASET_PATH = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\training_data.csv"
 OUTPUT_DIR = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\results"
+LOG_FILE = "C:\Users\DINAKARMARELLA\Documents\Dins\VibeT\SLM\slm_training.log"
+
+# --- Configure Logging ---
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler()
+    ]
+)
 
 def format_prompt(row):
     """Formats a single row of the DataFrame into a prompt string."""
@@ -50,30 +62,30 @@ def main():
     """
     Main function to orchestrate the SLM workflow.
     """
-    print("--- Starting SLM Fine-Tuning Workflow ---")
+    logging.info("--- Starting SLM Fine-Tuning Workflow ---")
 
     # 1. Load Tokenizer
-    print(f"1. Loading tokenizer for '{MODEL_NAME}'...")
+    logging.info(f"1. Loading tokenizer for '{MODEL_NAME}'...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
-    print("   Tokenizer loaded successfully.")
+    logging.info("   Tokenizer loaded successfully.")
 
     # 2. Load and Prepare Dataset
-    print(f"2. Loading and preparing dataset from '{DATASET_PATH}'...")
+    logging.info(f"2. Loading and preparing dataset from '{DATASET_PATH}'...")
     train_dataset = load_and_prepare_dataset(tokenizer)
-    print(f"   Dataset loaded and tokenized. Found {len(train_dataset)} records.")
+    logging.info(f"   Dataset loaded and tokenized. Found {len(train_dataset)} records.")
 
     # 3. Load Model
-    print(f"3. Loading base model '{MODEL_NAME}'...")
+    logging.info(f"3. Loading base model '{MODEL_NAME}'...")
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         trust_remote_code=True,
         torch_dtype=torch.float16, # Use float16 for memory efficiency
         device_map="auto" # Automatically use GPU if available
     )
-    print("   Base model loaded successfully.")
+    logging.info("   Base model loaded successfully.")
 
     # 4. Configure PEFT/LoRA
-    print("4. Configuring LoRA for efficient fine-tuning...")
+    logging.info("4. Configuring LoRA for efficient fine-tuning...")
     lora_config = LoraConfig(
         r=16, # Rank of the update matrices. Higher rank means more parameters to train.
         lora_alpha=32, # Alpha parameter for scaling.
@@ -83,11 +95,10 @@ def main():
         task_type="CAUSAL_LM"
     )
     model = get_peft_model(model, lora_config)
-    print("   LoRA configured successfully.")
-    model.print_trainable_parameters()
-
+    logging.info("   LoRA configured successfully.")
+    
     # 5. Configure and Run Trainer
-    print("5. Configuring and starting the training process...")
+    logging.info("5. Configuring and starting the training process...")
     training_args = TrainingArguments(
         output_dir=OUTPUT_DIR,
         per_device_train_batch_size=1,
@@ -106,15 +117,15 @@ def main():
     )
 
     trainer.train()
-    print("   Training completed.")
+    logging.info("   Training completed.")
 
     # 6. Save the fine-tuned model
-    print(f"6. Saving fine-tuned model adapters to '{OUTPUT_DIR}'...")
+    logging.info(f"6. Saving fine-tuned model adapters to '{OUTPUT_DIR}'...")
     model.save_pretrained(OUTPUT_DIR)
     tokenizer.save_pretrained(OUTPUT_DIR)
-    print("   Model saved successfully.")
+    logging.info("   Model saved successfully.")
 
-    print("\n--- SLM Fine-Tuning Workflow Finished ---")
+    logging.info("\n--- SLM Fine-Tuning Workflow Finished ---")
 
 if __name__ == "__main__":
     main()

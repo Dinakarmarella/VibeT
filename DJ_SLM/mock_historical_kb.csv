@@ -1,0 +1,4 @@
+Defect_ID,Summary,Issue_Description,Flow,Severity,Reported_By_App,Resolution_Steps,Solving_Team
+DEF-123,"Login Failure","User cannot login to platform",AuthService,Sev1,web-app,"Restart auth-service","Identity-Access-Team"
+DEF-124,"Payment Gateway Timeout","Customer payments are failing intermittently",Payments,Sev1,e-commerce,"Check payment service logs","Payments-Dev-Team"
+DEF-125,"Database Connection Error","Application unable to connect to database",Backend,Sev1,data-service,"Restart database instance","Platform-Infra-Team"

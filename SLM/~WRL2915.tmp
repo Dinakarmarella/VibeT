@@ -1,0 +1,50 @@
+# SLM Fine-Tuning Process Documentation
+
+This document outlines the setup and workflow for the Small Language Model (SLM) fine-tuning process within the `SLM` directory.
+
+## Process Overview
+
+The entire process is designed to take a general-purpose pre-trained SLM and specialize it on a custom dataset. This is achieved through an efficient fine-tuning technique called LoRA (Low-Rank Adaptation). The workflow is broken down into three main stages:
+
+### 1. Project Scaffolding (The Initial Setup)
+
+This foundational stage establishes the project's structure and organizes all necessary files.
+
+-   **`SLM/` Directory:** A dedicated folder was created to house the project, ensuring all related files are kept in a single, organized location.
+-   **`training_data.csv`:** This CSV file contains the custom knowledge base for training. It uses columns like `instruction`, `input`, and `output` to teach the model how to respond to specific queries (e.g., questions about HR or dental policies).
+-   **`requirements.txt`:** This file lists all the Python libraries the project depends on, such as `torch`, `transformers`, and `peft`. It allows anyone to replicate the environment easily using `pip install -r requirements.txt`.
+-   **`main.py` (Initial Version):** The first version of the main script was created with the core logic to load a model and data.
+
+### 2. The Core Fine-Tuning Logic (Inside `main.py`)
+
+The `main.py` script is the heart of the project, orchestrating the entire fine-tuning workflow from start to finish.
+
+1.  **Load Data:** The script begins by loading the question-and-answer pairs from `training_data.csv` using the `pandas` library.
+2.  **Format Prompts:** Each data entry is converted into a standardized prompt format. This structured text helps the model distinguish between instructions, inputs, and the desired responses.
+3.  **Load Tokenizer:** A `Tokenizer` corresponding to the pre-trained model (`EleutherAI/pythia-14m`) is loaded. Its function is to convert the text prompts into numerical tokens, the language the model understands.
+4.  **Load Base Model:** The pre-trained SLM, `EleutherAI/pythia-14m`, is loaded into memory. This model possesses a general understanding of language, which serves as the foundation for fine-tuning.
+5.  **Configure for Efficient Tuning (PEFT/LoRA):** This is a critical optimization step. Instead of retraining the entire multi-million parameter model (which is computationally expensive), we use **LoRA (Low-Rank Adaptation)**. This technique freezes the original model's weights and injects small, trainable "adapter" layers. We only train these adapters, making the process significantly faster and more memory-efficient.
+6.  **Execute Training:** The `Trainer` object from the `transformers` library manages the fine-tuning process. It takes the model, dataset, and training parameters (like learning rate and number of epochs) and runs the training loop, adjusting the LoRA adapters to learn the patterns in our custom data.
+7.  **Save the Fine-Tuned Adapters:** After training is complete, the script saves the newly trained LoRA adapters to the `results/` directory. These small files contain all the new knowledge the model has acquired.
+
+### 3. Refinement and Robustness (Script Enhancements)
+
+After establishing the core logic, a key improvement was made to make the process more reliable and observable.
+
+-   **Logging Implementation:** All `print()` statements were replaced with a robust `logging` system. All output, progress updates, and potential errors are now automatically recorded in a log file named `slm_training.log`. This is crucial for long-running tasks; if the session is interrupted, the training continues, and the log file provides a complete record of its progress.
+
+
+  Here’s how the inference.py script will work:
+
+   1. Load the Model: It will load the original EleutherAI/pythia-14m base model.
+   2. Apply Your Fine-Tuning: It will then load the LoRA adapters that you trained (from the SLM/results directory) and apply them to the base
+      model. This creates your specialized, fine-tuned model.
+   3. Interactive Prompt: The script will present you with a prompt where you can enter an instruction (e.g., "What are the benefits of the PPO
+      dental plan?").
+   4. Generate Response: It will take your instruction, format it into the prompt structure the model expects, and then use the model to generate a
+       response.
+   5. Display Result: Finally, it will print the model's answer back to you.
+
+  This will allow you to have a conversation with your model and see how well it has learned the information from your custom training data.
+
+  Shall I proceed with creating this inference.py script for you?

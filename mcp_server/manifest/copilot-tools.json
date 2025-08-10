@@ -1,0 +1,30 @@
+{
+  "name": "mcp-invoke",
+  "description": "Invokes an internal service via the MCP server.",
+  "parameters": [
+    {
+      "name": "service",
+      "description": "The target service name (e.g., 'library', 'cafeteria').",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "endpoint",
+      "description": "The API endpoint path (e.g., '/add_user').",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "template_id",
+      "description": "The ID of the request template to use.",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "payload_overrides",
+      "description": "A JSON object of values to override in the template.",
+      "type": "object",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+add_user_template:
+  name: "Default User"
+  email: "user@example.com"
+
+order_meal_template:
+  item: "Standard Meal"
+  quantity: 1

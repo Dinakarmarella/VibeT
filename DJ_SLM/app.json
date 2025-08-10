@@ -1,0 +1,34 @@
+{
+  "name": "DJ SLM Automation",
+  "description": "Automated triage of Sev1 defects from Jira using a small language model (SLM).",
+  "repository": "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME",
+  "logo": "https://avatars.githubusercontent.com/u/106133544?s=200&v=4",
+  "keywords": ["python", "langchain", "rag", "automation"],
+  "env": {
+    "JIRA_API_URL": {
+      "description": "The URL of your Jira instance.",
+      "value": "https://your-jira-instance.atlassian.net/rest/api/3"
+    },
+    "JIRA_USER_EMAIL": {
+      "description": "Your Jira user email.",
+      "value": ""
+    },
+    "JIRA_API_TOKEN": {
+      "description": "Your Jira API token.",
+      "value": ""
+    },
+    "DYNATRACE_API_URL": {
+      "description": "The URL of your Dynatrace environment.",
+      "value": "https://your-dynatrace-environment.live.dynatrace.com/api/v2"
+    },
+    "DYNATRACE_API_TOKEN": {
+      "description": "Your Dynatrace API token.",
+      "value": ""
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

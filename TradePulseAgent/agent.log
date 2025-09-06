@@ -1,0 +1,5 @@
+2025-09-06 13:14:47,350 - INFO - --- Social Media Agent Started ---
+2025-09-06 13:14:47,350 - INFO - --- Running Agent Task ---
+2025-09-06 13:14:47,461 - ERROR - Error fetching news from Forex Factory: 403 Client Error: Forbidden for url: https://www.forexfactory.com/news
+2025-09-06 13:14:47,461 - INFO - --- Agent Task Finished ---
+2025-09-06 13:14:47,461 - INFO - Agent scheduled to run every 3 hours. Waiting for next run...

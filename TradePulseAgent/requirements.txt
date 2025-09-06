@@ -1,0 +1,5 @@
+schedule
+requests
+tweepy
+cohere
+beautifulsoup4

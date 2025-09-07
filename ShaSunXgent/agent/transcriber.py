@@ -27,10 +27,18 @@ class Transcriber:
         """
         print(f"Transcriber: Getting transcript for video ID: {video_id}")
         try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-            
+            # First, list all available transcripts for the video
+            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+
+            # Find the English transcript from the list
+            # You can also iterate here to find manually created transcripts or specific languages
+            transcript = transcript_list.find_transcript(['en'])
+
+            # Fetch the actual transcript data
+            transcript_data = transcript.fetch()
+
             # Combine the transcript segments into a single block of text
-            full_transcript = " ".join([item['text'] for item in transcript_list])
+            full_transcript = " ".join([item['text'] for item in transcript_data])
             print(f"Transcriber: Successfully retrieved transcript for video ID: {video_id}")
             return full_transcript
         

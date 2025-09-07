@@ -1,0 +1,12 @@
+# Virtual Environment
+.venv/
+
+# SQLite database
+*.db
+
+# Configuration file with secrets
+config.yaml
+
+# Python cache
+__pycache__/
+*.pyc

@@ -1,0 +1,57 @@
+# Configuration for the Automated Content Agent
+# Copy this file to config.yaml and fill in your actual values.
+
+# -----------------
+# API Keys & Secrets
+# -----------------
+# It is strongly recommended to use environment variables for these in production.
+api_keys:
+    youtube: "YOUR_YOUTUBE_API_KEY"
+    x_api_key: "YOUR_X_API_KEY"
+    x_api_secret: "YOUR_X_API_SECRET"
+    x_access_token: "YOUR_X_ACCESS_TOKEN"
+    x_access_token_secret: "YOUR_X_ACCESS_TOKEN_SECRET"
+
+# -----------------
+# Data Sources
+# -----------------
+sources:
+    youtube_channels:
+        - channel_id: "UCefpbeaxmfU352Dw1enZRWg" # SHARRAB
+          name: "SHARRAB"
+        - channel_id: "UC7L0c_c3sN4y0Xs4Qf0p0rw" # P R Sundar
+          name: "P R Sundar"
+
+    news_websites:
+        - url: "https://www.fastbull.com/news"
+          name: "Fast Bull"
+          article_selector: "h2" # CSS selector for article headlines
+        - url: "https://tradingeconomics.com/calendar"
+          name: "Trading Economics"
+          event_selector: "tr.table-event" # CSS selector for calendar events
+
+# -----------------
+# AI Processor Settings
+# -----------------
+processor:
+    model: "distilbart-cnn-6-6" # Hugging Face model for summarization
+    prompt: "Summarize the key financial points from this text regarding stock markets, global trends, and specific stocks in under 75 words."
+    max_length: 150 # Max length of the summary
+    min_length: 30  # Min length of the summary
+
+# -----------------
+# Publisher Settings
+# -----------------
+publisher:
+    platform: "x" # Target platform
+    tweet_template: |
+        Morning markets with Tradepulse!
+        {summary}
+        Trends: {trends}.
+        #StockMarket #Finance #Tradepulse [tradepulse.com]
+
+# -----------------
+# System Settings
+# -----------------
+system:
+    database_path: "agent_state.db" # Path to the SQLite database file

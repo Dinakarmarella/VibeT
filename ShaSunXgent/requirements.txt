@@ -1,0 +1,13 @@
+# Core dependencies
+requests
+beautifulsoup4
+schedule
+pytz
+tweepy
+transformers
+torch
+pyyaml
+google-api-python-client
+
+# For type checking (development)
+mypy

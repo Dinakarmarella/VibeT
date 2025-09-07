@@ -132,7 +132,7 @@ Getting keys for the X API requires a developer account and an approved App.
     *   You will also see an **Access Token and Secret**. Generate these as well. These are your `x_access_token` and `x_access_token_secret`.
 5.  **Paste the Credentials:** Copy all four values into the corresponding fields in your `config.yaml` file.
 
-### 6.2. Agent Installation and Execution
+### 6.3. Agent Installation and Execution
 
 1.  **Install Dependencies:**
     ```bash

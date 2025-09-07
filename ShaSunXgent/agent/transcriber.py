@@ -4,7 +4,7 @@ The Transcriber module for the Automated Content Agent.
 This module is responsible for fetching the full text transcript of a YouTube video.
 """
 
-from youtube_transcript_api import list_transcripts
+import youtube_transcript_api as yt_api
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 
 class Transcriber:
@@ -28,7 +28,7 @@ class Transcriber:
         print(f"Transcriber: Getting transcript for video ID: {video_id}")
         try:
             # First, list all available transcripts for the video
-            transcript_list = list_transcripts(video_id)
+            transcript_list = yt_api.YouTubeTranscriptApi.list_transcripts(video_id)
 
             # Find the English transcript from the list
             # You can also iterate here to find manually created transcripts or specific languages

@@ -8,6 +8,7 @@ transformers
 torch
 pyyaml
 google-api-python-client
+youtube-transcript-api
 
 # For type checking (development)
 mypy

@@ -14,10 +14,11 @@ This document provides a complete technical specification for the Automated Cont
 ### 1.2. Core Functionality
 
 The agent performs a complete, end-to-end workflow:
-1.  **Fetches** new video content from specified YouTube channels.
-2.  **Processes** the video descriptions using a Small Language Model (SLM) to generate summaries.
-3.  **Publishes** the formatted summaries to a configured X (Twitter) account.
-4.  **Maintains State** by recording all actions in a local database to prevent duplicate content publication.
+1.  **Fetches** new video metadata (ID, title) from specified YouTube channels.
+2.  **Transcribes** the full audio of each new video to text.
+3.  **Processes** the long-form transcript using a Small Language Model (SLM) with a Map-Reduce strategy to generate high-quality summaries.
+4.  **Publishes** the formatted summaries to a configured X (Twitter) account.
+5.  **Maintains State** by recording all actions in a local database to prevent duplicate content publication.
 
 ---
 
@@ -35,11 +36,11 @@ The architecture is designed to be modular, decoupled, and configurable, ensurin
 ### 2.2. Architecture Diagram
 
 ```
-+-----------+      +--------------+      +-----------+      +-----------+      +-----------+
-| Scheduler | ---> | Orchestrator | ---> |  Fetcher  | ---> | Processor | ---> | Publisher |
-+-----------+      +--------------+      +-----------+      +-----------+      +-----------+
-     |                    |                     |                  |                  |
-     |                    +---------------------+------------------+------------------+
++-----------+      +--------------+      +-----------+      +-------------+      +-----------+      +-----------+
+| Scheduler | ---> | Orchestrator | ---> |  Fetcher  | ---> | Transcriber | ---> | Processor | ---> | Publisher |
++-----------+      +--------------+      +-----------+      +-------------+      +-----------+      +-----------+
+     |                    |                     |                  |                  |                  |
+     |                    +---------------------+------------------+------------------+------------------+
      |                                          |
      |                                          v
      |                                  +----------------+
@@ -51,23 +52,25 @@ The architecture is designed to be modular, decoupled, and configurable, ensurin
 ### 2.3. Component Breakdown
 
 - **Orchestrator (`orchestrator.py`):** The central "Manager." It directs the overall workflow, calling other modules in sequence and managing high-level error handling.
-- **Fetcher (`fetcher.py`):** The "Researcher." It retrieves raw data from external sources (currently YouTube) using the appropriate APIs.
-- **Processor (`processor.py`):** The "Writer." It uses a Hugging Face `transformers` model to clean and summarize raw text.
-- **Publisher (`publisher.py`):** The "Publicist." It formats the final content and posts it to social media platforms (currently X) using the `tweepy` library.
+- **Fetcher (`fetcher.py`):** The "Researcher." It retrieves video metadata (ID, Title) from YouTube to identify new content that needs to be processed.
+- **Transcriber (`transcriber.py`):** The "Stenographer." It takes a video ID from the Fetcher and uses the `youtube-transcript-api` library to download the full, spoken-word transcript of the video.
+- **Processor (`processor.py`):** The "Writer." It now handles potentially very long transcripts by implementing a **Map-Reduce** summarization strategy. It breaks the transcript into chunks, summarizes each one, and then combines those summaries into a final, coherent overview.
+- **Publisher (`publisher.py`):** The "Publicist." It formats the final summary and posts it to social media platforms (currently X) using the `tweepy` library.
 - **State Manager (`state_manager.py`):** The system's "Memory." It uses an SQLite database to log all processed items and their status, preventing redundant work.
 
 ---
 
-## 3. Workflow
+### 3. Workflow
 
 The primary task (`daily_youtube_summary`) follows this sequence:
 
 1.  **Trigger:** A system scheduler (e.g., `cron`) executes `main.py`.
 2.  **Initialization:** The `Orchestrator` is initialized, loading all configurations and modules.
-3.  **Fetch:** The `Orchestrator` calls the `Fetcher`. The `Fetcher` queries the YouTube API for recent videos and consults the `State Manager` to filter out any videos that have already been processed.
-4.  **Process:** For each new video, the `Orchestrator` passes its description to the `Processor`, which returns a generated summary.
-5.  **Publish:** The `Orchestrator` passes the summary to the `Publisher`. The `Publisher` formats the text into a tweet and posts it to X.
-6.  **Update State:** Upon successful publication, the `Orchestrator` instructs the `State Manager` to mark the video ID as `published` in the database.
+3.  **Fetch:** The `Orchestrator` calls the `Fetcher` to get a list of new video IDs.
+4.  **Transcribe:** For each new video ID, the `Orchestrator` calls the `Transcriber` to download the full text transcript.
+5.  **Process:** The `Orchestrator` passes the long transcript to the `Processor`, which uses its Map-Reduce strategy to produce a final summary.
+6.  **Publish:** The `Orchestrator` passes the final summary to the `Publisher` to be posted to X.
+7.  **Update State:** Upon successful publication, the `Orchestrator` instructs the `State Manager` to mark the video ID as `published` in the database.
 
 ---
 
@@ -75,7 +78,7 @@ The primary task (`daily_youtube_summary`) follows this sequence:
 
 All agent behavior is controlled via the `config.yaml` file. A template (`config.yaml.template`) is provided.
 
-- **`api_keys`**: Holds all necessary credentials for YouTube and X APIs.
+- **`api_keys`**: Holds all necessary credentials for YouTube and X APIs. Can be overridden by environment variables.
 - **`sources`**: Defines the data sources, such as YouTube channel IDs and news website URLs.
 - **`processor`**: Configures the SLM, including the Hugging Face model name and summarization parameters.
 - **`publisher`**: Contains settings for publication, such as the tweet format template.
@@ -88,6 +91,7 @@ All agent behavior is controlled via the `config.yaml` file. A template (`config
 - **Language:** Python 3
 - **Key Libraries:**
     - **Fetcher:** `google-api-python-client` for YouTube API access.
+    - **Transcriber:** `youtube-transcript-api` to download video transcripts.
     - **Processor:** `transformers` and `torch` for loading and running the SLM.
     - **Publisher:** `tweepy` for interacting with the X API.
     - **State Manager:** `sqlite3` for database interaction.

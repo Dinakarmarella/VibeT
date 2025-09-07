@@ -1,0 +1,45 @@
+"""
+The Transcriber module for the Automated Content Agent.
+
+This module is responsible for fetching the full text transcript of a YouTube video.
+"""
+
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
+
+class Transcriber:
+    """Fetches video transcripts from YouTube."""
+
+    def __init__(self):
+        """Initializes the Transcriber."""
+        print("Transcriber: Initialized.")
+
+    def get_transcript(self, video_id: str) -> str | None:
+        """
+        Retrieves the full transcript for a given YouTube video ID.
+
+        Args:
+            video_id: The unique identifier of the YouTube video.
+
+        Returns:
+            The full transcript as a single string, or None if a transcript
+            cannot be retrieved.
+        """
+        print(f"Transcriber: Getting transcript for video ID: {video_id}")
+        try:
+            transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+            
+            # Combine the transcript segments into a single block of text
+            full_transcript = " ".join([item['text'] for item in transcript_list])
+            print(f"Transcriber: Successfully retrieved transcript for video ID: {video_id}")
+            return full_transcript
+        
+        except TranscriptsDisabled:
+            print(f"Transcriber: Warning - Transcripts are disabled for video ID: {video_id}")
+            return None
+        except NoTranscriptFound as e:
+            print(f"Transcriber: Warning - Could not find a transcript for video ID: {video_id}. Error: {e}")
+            return None
+        except Exception as e:
+            print(f"Transcriber: An unexpected error occurred while fetching transcript for video ID {video_id}: {e}")
+            return None

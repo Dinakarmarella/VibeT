@@ -15,17 +15,18 @@ from .state_manager import StateManager
 class Fetcher:
     """Collects data from external sources."""
 
-    def __init__(self, config: dict, state_manager: StateManager):
+    def __init__(self, config: dict, state_manager: StateManager, api_keys: dict):
         """
         Initializes the Fetcher with data source configurations.
 
         Args:
             config: The application's configuration dictionary.
             state_manager: An instance of the StateManager.
+            api_keys: A dictionary containing the API keys.
         """
         self.config = config
         self.state_manager = state_manager
-        self.youtube_api_key = self.config.get('api_keys', {}).get('youtube')
+        self.youtube_api_key = api_keys.get('youtube')
         print("Fetcher: Initialized.")
 
     def get_new_youtube_videos(self, max_results=2) -> list:

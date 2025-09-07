@@ -97,6 +97,43 @@ All agent behavior is controlled via the `config.yaml` file. A template (`config
 
 ## 6. Setup and Usage
 
+### 6.1. API Key Acquisition
+
+To run the agent, you need credentials from both Google Cloud (for YouTube) and X (Twitter).
+
+#### 6.1.1. YouTube Data API v3 Key
+
+1.  **Go to the Google Cloud Console:** Navigate to [console.cloud.google.com](https://console.cloud.google.com) and sign in with your Google account.
+2.  **Create a Project:** If you don't have one already, create a new project.
+3.  **Enable the API:**
+    *   Go to the navigation menu (☰) and select **APIs & Services > Library**.
+    *   Search for "**YouTube Data API v3**" and click on it.
+    *   Click the **Enable** button.
+4.  **Create Credentials:**
+    *   Go to **APIs & Services > Credentials**.
+    *   Click **+ CREATE CREDENTIALS** at the top and select **API key**.
+    *   Your key will be generated. Copy it and keep it safe.
+5.  **Paste the Key:** Copy this key into the `youtube` field in your `config.yaml` file.
+
+#### 6.1.2. X (Twitter) API v2 Keys and Tokens
+
+Getting keys for the X API requires a developer account and an approved App.
+
+1.  **Apply for a Developer Account:** Go to the [X Developer Portal](https://developer.x.com) and apply for an account. There may be a review process.
+2.  **Create a Project and App:**
+    *   Once your developer account is approved, create a new **Project**.
+    *   Within your project, create a new **App**.
+3.  **Set App Permissions:**
+    *   In your App's settings, find the **User authentication settings**.
+    *   Ensure the permissions are set to **Read and Write**.
+4.  **Generate Keys and Tokens:**
+    *   Navigate to your App's **Keys and Tokens** tab.
+    *   You will see an **API Key and Secret**. Generate them if they are not already visible. These are your `x_api_key` and `x_api_secret`.
+    *   You will also see an **Access Token and Secret**. Generate these as well. These are your `x_access_token` and `x_access_token_secret`.
+5.  **Paste the Credentials:** Copy all four values into the corresponding fields in your `config.yaml` file.
+
+### 6.2. Agent Installation and Execution
+
 1.  **Install Dependencies:**
     ```bash
     pip install -r requirements.txt

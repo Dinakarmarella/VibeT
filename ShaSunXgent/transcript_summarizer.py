@@ -107,8 +107,8 @@ def summarize_text(text: str) -> str | None:
                 chunk_summary = summarizer(chunk, max_length=150, min_length=40, do_sample=False)[0]["summary_text"]
                 summaries.append(chunk_summary)
             
-            # Summarize the summaries
-            final_summary = summarizer(" ".join(summaries), max_length=250, min_length=50, do_sample=False)[0]["summary_text"]
+            # Join the summaries of the chunks
+            final_summary = " ".join(summaries)
         else:
             print("Text is short, summarizing directly...")
             final_summary = summarizer(text, max_length=250, min_length=50, do_sample=False)[0]["summary_text"]

@@ -1,1 +1,41 @@
+# Ignore environment variables
 .env
+
+# Ignore Markdown files
+*.md
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+.venv/
+
+# Ignore log files
+*.log
+
+# Ignore compressed files
+*.zip
+
+# Ignore document files
+*.docx
+*.pdf
+
+# Ignore data files
+*.csv
+*.pkl
+*.bin
+*.joblib
+*.keras
+
+# Ignore temporary office files
+~$*
+
+# Ignore media files
+*.mp3
+
+# Ignore temporary commit messages
+commit_message.txt
+
+# Ignore output files
+output.txt

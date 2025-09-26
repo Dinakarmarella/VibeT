@@ -1,0 +1,19 @@
+jira:
+  domain: "your-jira-domain.atlassian.net"
+  email: "your-email@example.com"
+  api_token: "your-jira-api-token"
+
+paths:
+  raw_data: "data/raw_data.csv"
+  processed_data: "data/processed_data.csv"
+  cnn_model: "cnn_model.keras"
+  tokenizer: "tokenizer.joblib"
+  label_encoder: "label_encoder.joblib"
+
+cnn_model:
+  vocab_size: 10000
+  embedding_dim: 128
+  max_length: 200
+  num_epochs: 10
+  batch_size: 32
+  target_column: "Root_Cause"

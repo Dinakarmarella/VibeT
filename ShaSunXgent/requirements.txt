@@ -9,6 +9,7 @@ torch
 pyyaml
 google-api-python-client
 youtube-transcript-api
+yt-dlp
 
 # For type checking (development)
 mypy

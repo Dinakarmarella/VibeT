@@ -7,6 +7,7 @@ by calling the appropriate Fetcher, Transcriber, Processor, and Publisher module
 
 import yaml
 import os
+from datetime import datetime
 
 # Local imports
 from .state_manager import StateManager
@@ -69,6 +70,15 @@ class Orchestrator:
             print(f"Orchestrator: Error - Task '{task_name}' not recognized.")
         print(f"Orchestrator: Task '{task_name}' finished.")
 
+    def save_summary_to_log(self, video, summary):
+        """Appends a summary to the youtube_summarizer_log.md file."""
+        log_file = "youtube_summarizer_log.md"
+        with open(log_file, "a") as f:
+            f.write(f"## Daily Summary - {datetime.now().strftime('%Y-%m-%d')}\n\n")
+            f.write(f"### Video: {video['title']}\n")
+            f.write(f"*   **ID:** `{video['id']}`\n")
+            f.write(f"*   **Summary:** {summary}\n\n")
+
     def run_youtube_summary_flow(self):
         """
         Runs the full workflow for fetching, transcribing, processing, and publishing.
@@ -99,6 +109,9 @@ class Orchestrator:
                 self.state_manager.mark_as_processed(video['id'], video['source'], 'failed_processing')
                 print(f"--- Finished workflow for video: {video['title']} (Processing Failed) ---")
                 continue
+            
+            # Save the summary to the log file
+            self.save_summary_to_log(video, summary)
 
             # 4. Publish the summary
             success = self.publisher.post(summary=summary, trends="AI Summary")
@@ -111,4 +124,3 @@ class Orchestrator:
             print(f"--- Finished workflow for video: {video['title']} ---")
         
         print("Orchestrator: YouTube Transcript Summary workflow complete.")
-

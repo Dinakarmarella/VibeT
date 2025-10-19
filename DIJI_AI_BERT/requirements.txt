@@ -3,5 +3,5 @@ pyyaml
 joblib
 pandas
 scikit-learn
-tensorflow
-networkx
+transformers
+torch

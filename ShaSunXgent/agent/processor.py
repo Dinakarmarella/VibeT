@@ -21,7 +21,7 @@ class Processor:
         self.summarizer = self._load_model()
         # A rough estimation of max tokens for the model, used for chunking.
         # (e.g., distilbart is 1024 tokens). We use a smaller number for safety.
-        self.chunk_max_length = 800 
+        self.chunk_max_length = 512 
         print("Processor: Initialized.")
 
     def _load_model(self) -> Pipeline | None:

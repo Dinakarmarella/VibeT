@@ -1,0 +1,18 @@
+jira:
+  domain: "your-jira-domain.atlassian.net"
+  email: "your-email@example.com"
+  api_token: "your-jira-api-token"
+
+paths:
+  raw_data: "data/raw_data.csv"
+  processed_data: "data/processed_data.csv"
+  bert_model: "bert_model"
+  label_encoder: "label_encoder.joblib"
+
+bert_model:
+  model_name: "bert-base-uncased"
+  max_length: 512
+  batch_size: 16
+  num_epochs: 10
+  learning_rate: 2e-5
+  target_column: "Root_Cause"

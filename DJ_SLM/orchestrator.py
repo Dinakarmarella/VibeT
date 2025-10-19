@@ -1,101 +1,59 @@
+import sys
+import jira_agent
+import slm_automation
 
+def main():
+    """Main orchestration function."""
+    if len(sys.argv) < 2:
+        print("Usage: python orchestrator.py <JIRA_ISSUE_ID>")
+        sys.exit(1)
 
-import os
-from dotenv import load_dotenv
-from slm_automation (
-    load_data,
-    initialize_embedding_model,
-    load_faiss_index,
-    create_faiss_index,
-    process_defect
-)
-from jira_agent import fetch_jira_issue, update_jira_ticket
+    jira_issue_id = sys.argv[1]
 
-# Load environment variables from .env file
-load_dotenv()
+    print(f"--- Starting analysis for Jira issue: {jira_issue_id} ---")
 
-def main(issue_id):
-    """
-    Main orchestration function.
+    # 1. Fetch issue details from Jira
+    issue_details = jira_agent.get_issue(jira_issue_id)
+    if not issue_details:
+        print(f"Could not retrieve details for {jira_issue_id}. Exiting.")
+        sys.exit(1)
+
+    # Extract summary and description
+    summary = issue_details.get('fields', {}).get('summary', '')
+    description_obj = issue_details.get('fields', {}).get('description')
     
-    Args:
-        issue_id (str): The ID of the Jira issue to process.
-    """
-    print(f"--- Starting SLM Defect Automation for Issue: {issue_id} ---")
+    # Jira description is a complex object, we need to parse it to text
+    description_text = ""
+    if description_obj:
+        for content_block in description_obj.get('content', []):
+            for content_item in content_block.get('content', []):
+                if content_item.get('type') == 'text':
+                    description_text += content_item.get('text', '') + "\n"
 
-    # 1. Load all necessary data and models
-    historical_kb, keyword_team_map = load_data()
-    model = initialize_embedding_model()
-    
-    # Load or create the FAISS index
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    faiss_index_path = os.path.join(base_dir, 'faiss_index.bin')
-    if os.path.exists(faiss_index_path):
-        faiss_index = load_faiss_index()
-        print("FAISS index loaded from file.")
-    else:
-        print("FAISS index not found. Creating and saving a new one.")
-        faiss_index = create_faiss_index(historical_kb, model)
-        print("FAISS index created and saved.")
+    if not description_text:
+        description_text = summary # Fallback to summary if description is empty
 
-    # 2. Fetch the Jira issue
-    print(f"Fetching details for Jira issue: {issue_id}...")
-    jira_issue = fetch_jira_issue(issue_id)
+    print(f"\n--- Analyzing issue: {summary} ---")
 
-    if not jira_issue or "fields" not in jira_issue or not jira_issue["fields"].get("description"):
-        print(f"Error: Could not fetch Jira issue {issue_id} or it has no description. Aborting.")
-        return
+    # 2. Get analysis from the SLM automation module
+    # We are using the mock function from slm_automation for this example
+    assigned_team, suggested_resolution = slm_automation.analyze_new_defect_mock(description_text)
 
-    defect_description = jira_issue["fields"]["description"]
-    print(f"Successfully fetched issue. Summary: {jira_issue['fields']['summary']}")
+    print(f"\n--- SLM Analysis Complete ---")
+    print(f"Suggested Team: {assigned_team}")
+    print(f"Suggested Resolution: {suggested_resolution}")
 
-    # 3. Process the defect to get assignment and resolution
-    print("Processing defect for team assignment and resolution steps...")
-    assigned_team, resolution_steps = process_defect(
-        defect_description,
-        model,
-        faiss_index,
-        historical_kb,
-        keyword_team_map
+    # 3. Update the Jira issue with the analysis
+    comment = (
+        f"**Automated SLM Analysis:**\n\n"
+        f"**Suggested Team:** {assigned_team}\n"
+        f"**Suggested Resolution:**\n{suggested_resolution}"
     )
 
-    if not assigned_team or assigned_team == "Unassigned":
-        print("Could not determine team assignment. Manual intervention required.")
-        # Optionally, send a notification here
-        return
+    print(f"\n--- Updating Jira issue {jira_issue_id} ---")
+    jira_agent.update_issue(jira_issue_id, comment, assigned_team)
 
-    print(f"Triage complete. Assigned Team: {assigned_team}, Suggested Resolution: {resolution_steps}")
-
-    # 4. Update the Jira ticket
-    print(f"Updating Jira ticket {issue_id}...")
-    update_payload = {
-        "fields": {
-            # Note: To assign a user in Jira, you may need 'accountId' instead of 'name'
-            # This depends on your Jira instance configuration.
-            # "assignee": {"name": assigned_team},
-            "comment": [{
-                "add": {
-                    "body": f"Automated Triage Result:\n\n*Assigned Team:* {assigned_team}\n*Suggested Action:* {resolution_steps}"
-                }
-            }]
-        }
-    }
-    
-    update_result = update_jira_ticket(issue_id, update_payload)
-    print(f"Jira update result: {update_result}")
-    print(f"--- Automation process for Issue {issue_id} finished. ---")
-
+    print(f"\n--- Process for {jira_issue_id} complete. ---")
 
 if __name__ == "__main__":
-    # This allows the script to be run from the command line with an issue ID
-    # Example: python orchestrator.py DEF-123
-    import sys
-    if len(sys.argv) > 1:
-        issue_to_process = sys.argv[1]
-        main(issue_to_process)
-    else:
-        print("Please provide a Jira issue ID as a command-line argument.")
-        # Example of running with a default test ID
-        print("Running with default test issue 'DEF-789'.")
-        main("DEF-789")
-
+    main()

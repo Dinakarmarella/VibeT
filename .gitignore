@@ -39,3 +39,6 @@ commit_message.txt
 
 # Ignore output files
 output.txt
+\"DIJI_AI_BERT/bert_model/model.safetensors\" 
+\"DIJI_AI_BERT/prediction_report.txt\"  
+\"DIJI_AI_BERT/test_report.txt\" 
